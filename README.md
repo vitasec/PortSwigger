@@ -1,5 +1,5 @@
 # 🛡️ PortSwigger Academy Lab Solutions
-![GitHub top language](https://img.shields.io/github/languages/top/USER_NAME/PortSwigger?color=orange)
+![GitHub top language](https://img.shields.io/github/languages/top/vitasec/PortSwigger?color=orange)
 ![Security Status](https://img.shields.io/badge/Security-Pentesting-red)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
